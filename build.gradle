@@ -9,7 +9,7 @@ subprojects{
     task copyClassesToBin{
         
         copy {
-            from 'build/classes/main/sec/'
+            from 'build/classes/java/main/sec/'
             into '../deploy/classes/'
         }
     }
