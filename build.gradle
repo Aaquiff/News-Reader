@@ -1,0 +1,20 @@
+//Gradle file for the main directory
+
+//apply plugin: 'java'
+
+
+subprojects{
+    apply plugin: 'java'
+    
+    task copyClassesToBin{
+        
+        copy {
+            from 'build/classes/main/sec/'
+            into '../deploy/classes/'
+        }
+    }
+
+    compileJava.doLast {
+        tasks.copyClassesToBin.execute()
+    }
+}

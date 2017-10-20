@@ -1,0 +1,23 @@
+//Gradle file for core project
+
+apply plugin: 'java'
+
+task copyJarToBin{
+    delete '../deploy/core.jar'
+    //delete '../deploy/classes'
+    copy {
+        from 'build/libs'
+        into '../deploy'
+    }
+}
+
+jar {
+    manifest{
+        attributes 'Main-Class': 'sec.Sec'
+    }
+    from copyJarToBin
+}
+
+
+
+
