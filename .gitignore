@@ -1,0 +1,6 @@
+.gradle/
+arstechnica/build/
+bbc/build/
+core/build/
+deploy/
+nytimes/build/

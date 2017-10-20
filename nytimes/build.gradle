@@ -1,0 +1,6 @@
+
+dependencies {
+	// Declare a compile-time dependency on the 'core' sub-project.
+	compile project(':core')
+}
+
