@@ -7,49 +7,63 @@
 package sec;
 
 import models.News;
-import java.awt.List;
-import java.io.IOException;
-import java.io.Reader;
-import java.io.StringReader;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.text.BadLocationException;
-import javax.swing.text.Element;
-import javax.swing.text.MutableAttributeSet;
-import javax.swing.text.SimpleAttributeSet;
-import javax.swing.text.html.HTML;
-import javax.swing.text.html.HTMLDocument;
-import javax.swing.text.html.HTMLEditorKit;
-import javax.swing.text.html.parser.ParserDelegator;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
-/**
- *
- * @author aaralk
- */
 public class HTMLParser {
     public static ArrayList<News> Parse(String source, String html)
     {
-        ArrayList<News> news = new ArrayList<News>();
+        //ArrayList to return news
+        ArrayList<News> news = new ArrayList<>();
         
-        ArrayList<News> n1 = Parse1(source,html,"h1");
-        ArrayList<News> n2 = Parse1(source,html,"h2");
-        ArrayList<News> n3 = Parse1(source,html,"h3");
+        //Parse html document using Jsoup
+        Document doc = Jsoup.parse(html);
         
-        for(News n : n1)
-        {
+        //Get all h1 tags and create a news elements
+        Elements elements = doc.getElementsByTag("h1");
+        for (Element e : elements) {
+            News n = new News(source, e.text(), Date.from(Instant.now()));
             news.add(n);
+            System.out.println(e.text());
         }
-        for(News n : n2)
-        {
+        
+        //Get all h2 tags and create a news elements
+        elements = doc.getElementsByTag("h2");
+        for (Element e : elements) {
+            News n = new News(source, e.text(), Date.from(Instant.now()));
             news.add(n);
+            System.out.println(e.text());
         }
-        for(News n : n3)
-        {
+        
+        //Get all h3 tags and create a news elements
+        elements = doc.getElementsByTag("h3");
+        for (Element e : elements) {
+            News n = new News(source, e.text(), Date.from(Instant.now()));
             news.add(n);
+            System.out.println(e.text());
         }
+        
+//        ArrayList<News> n1 = Parse1(source,html,"h1");
+//        ArrayList<News> n2 = Parse1(source,html,"h2");
+//        ArrayList<News> n3 = Parse1(source,html,"h3");
+//        
+//        for(News n : n1)
+//        {
+//            news.add(n);
+//        }
+//        for(News n : n2)
+//        {
+//            news.add(n);
+//        }
+//        for(News n : n3)
+//        {
+//            news.add(n);
+//        }
         
         return news;
     }

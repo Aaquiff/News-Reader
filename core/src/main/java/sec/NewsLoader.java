@@ -23,11 +23,13 @@ import javax.swing.SwingUtilities;
 
 /*
 *   NewsLoader class is responsible for updating headlines periodically by invoking the plugins
-*/
+ */
 public class NewsLoader implements Runnable {
-
+    
     JList jListHeadlines, jListCurrentDownloads;
     ArrayList<NewsPlugin> plugins;
+    ArrayList<News> news = new ArrayList<>();
+    
     ExecutorService executor = Executors.newCachedThreadPool();
     ArrayList<Future<ArrayList<News>>> futureNewsArray = new ArrayList<Future<ArrayList<News>>>();
     ArrayList<String> currentlyDownloadingURLs = new ArrayList<String>();
@@ -40,45 +42,51 @@ public class NewsLoader implements Runnable {
 
     /*
     *   Update all plugins 
-    */
+     */
     public void Update() {
-        ArrayList<News> news = new ArrayList<>();
+        
         for (NewsPlugin plugin : plugins) {
-            
-            
-            
+
             futureNewsArray.add(executor.submit(new Callable<ArrayList<News>>() {
                 public ArrayList<News> call() {
                     System.out.println("Starting Thread");
-                    
+
                     //Update Currently Downloading list
                     currentlyDownloadingURLs.add(plugin.GetURL());
                     DefaultListModel model = new DefaultListModel();
-                    for (String url : currentlyDownloadingURLs)
+                    for (String url : currentlyDownloadingURLs) {
                         model.addElement(url);
-                    updateLabel(jListCurrentDownloads,model);
-                    
+                    }
+                    updateLabel(jListCurrentDownloads, model);
+
                     //Update the plugin and get News objects returned
                     ArrayList<News> newsList = plugin.update();
-                    
+
                     currentlyDownloadingURLs.remove(plugin.GetURL());
                     DefaultListModel model2 = new DefaultListModel();
-                    for (String url : currentlyDownloadingURLs)
+                    for (String url : currentlyDownloadingURLs) {
                         model2.addElement(url);
-                    updateLabel(jListCurrentDownloads,model2);
-                    
+                    }
+                    updateLabel(jListCurrentDownloads, model2);
+
                     System.out.println("Ending Thread");
                     return newsList;
                 }
             }));
-            
+
         }
 
         for (Future<ArrayList<News>> f : futureNewsArray) {
             try {
-                System.out.println("Result : " + f.get().size());
-                for (News n : f.get()) {
-                    news.add(n);
+                for (News n1 : f.get()) {
+                    boolean existsLocally = false;
+                    boolean topicNoLongerExists = false;
+                    for (News n2 : news) {
+                        if(n2.news.equals(n1.news))
+                            existsLocally = true;
+                    }
+                    if(!existsLocally)
+                        news.add(n1);
                 }
             } catch (CancellationException ex) {
                 System.out.println("CancellationException: Thread Cancelled");
@@ -106,15 +114,15 @@ public class NewsLoader implements Runnable {
     }
 
     public void UpdateOld() {
-        ArrayList<News> news = new ArrayList<>();       
-        
+        ArrayList<News> news = new ArrayList<>();
+
         for (NewsPlugin plugin : plugins) {
             ArrayList<News> allNews = plugin.update();
-            for(News n : allNews) {
+            for (News n : allNews) {
                 news.add(n);
             }
         }
-        
+
         DefaultListModel lm = new DefaultListModel();
         for (News n : news) {
             lm.addElement(n.source + ": " + n.news + " (" + n.time.toString() + ")");

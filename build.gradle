@@ -17,4 +17,12 @@ subprojects{
     compileJava.doLast {
         tasks.copyClassesToBin.execute()
     }
+
+    dependencies {
+        compile 'org.jsoup:jsoup:1.10.3'
+    }
+
+    repositories {
+        mavenCentral()
+    }
 }
