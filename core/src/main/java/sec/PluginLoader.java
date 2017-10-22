@@ -6,17 +6,6 @@ import java.nio.file.*;
 
 public class PluginLoader extends ClassLoader {
 
-    public static void main(String[] args) {
-        try {
-            PluginLoader pl = new PluginLoader();
-            NewsPlugin a = pl.loadPlugin("AddPlugin");
-            a.update();
-        } catch (Exception ex) {
-            System.out.println(ex.getMessage());
-        }
-
-    }
-
     public NewsPlugin loadPlugin(String fname) throws ClassNotFoundException {
         try {
             

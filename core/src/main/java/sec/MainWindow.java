@@ -1,30 +1,58 @@
 package sec;
 
 import java.util.ArrayList;
-import javax.swing.DefaultListModel;
-import javax.swing.ListModel;
 
-
+/*
+*   Swing GUI to show news information to the user
+*   Interacts with the NewsLoader to fetch news informations
+*/
 public class MainWindow extends javax.swing.JFrame {
 
     NewsLoader newsLoader;
-    
+            
     public MainWindow() {
         initComponents();
-        
     }
     
-    public MainWindow(ArrayList<NewsPlugin> plugins) {
+    /*
+    Overloaded constructor accepts NewsPlugin objects as arguments
+    */
+    public MainWindow(ArrayList<NewsPlugin> pPlugins) {
         this();
-        
+        //Create the NewsLoader thread that loads the list of news
+        newsLoader = new NewsLoader(jListHeadlines, jListCurrentDownloads, pPlugins);
+
         //Create a clockthread that displays the time.
         Thread clockThread = new Thread(new ClockThread(lblDate));
         clockThread.start();
         
-        //Create the NewsLoader thread that loads the list of news
-        newsLoader = new NewsLoader(jList1, plugins);
-        Thread newsThread = new Thread(newsLoader);
-        newsThread.start();
+        Update();
+    }
+    
+    /*
+    *   Update the headlines.
+    *   Spins of a thread to update the headlines and the GUI does not wait
+    */
+    private void Update(){
+        Thread thread = new Thread(new Runnable(){ 
+            @Override
+            public void run() {
+                newsLoader.Update();
+            }
+        });
+        thread.start();
+        
+    }
+    
+    private void CancelUpdate(){
+        Thread thread = new Thread(new Runnable(){ 
+            @Override
+            public void run() {
+                newsLoader.Cancel(); 
+            }
+        });
+        thread.start();
+        
     }
 
     /**
@@ -38,8 +66,13 @@ public class MainWindow extends javax.swing.JFrame {
 
         lblDate = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jList1 = new javax.swing.JList<>();
+        jListHeadlines = new javax.swing.JList<>();
         btnUpdate = new javax.swing.JButton();
+        btnCancel = new javax.swing.JButton();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jListCurrentDownloads = new javax.swing.JList<>();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("News Plugin");
@@ -47,7 +80,7 @@ public class MainWindow extends javax.swing.JFrame {
 
         lblDate.setText("Date");
 
-        jScrollPane1.setViewportView(jList1);
+        jScrollPane1.setViewportView(jListHeadlines);
 
         btnUpdate.setText("Update");
         btnUpdate.addActionListener(new java.awt.event.ActionListener() {
@@ -56,6 +89,19 @@ public class MainWindow extends javax.swing.JFrame {
             }
         });
 
+        btnCancel.setText("Cancel");
+        btnCancel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelActionPerformed(evt);
+            }
+        });
+
+        jScrollPane2.setViewportView(jListCurrentDownloads);
+
+        jLabel1.setText("Headlines");
+
+        jLabel2.setText("Current Downloads");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -63,22 +109,40 @@ public class MainWindow extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 986, Short.MAX_VALUE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                    .addGroup(layout.createSequentialGroup()
                         .addComponent(btnUpdate)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(lblDate)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnCancel)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 825, Short.MAX_VALUE)
+                        .addComponent(lblDate))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 749, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel1))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel2)
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 503, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(jLabel2))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 428, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblDate)
-                    .addComponent(btnUpdate))
+                    .addComponent(btnUpdate)
+                    .addComponent(btnCancel))
                 .addContainerGap())
         );
 
@@ -86,8 +150,12 @@ public class MainWindow extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
-        newsLoader.Update();
+        Update();
     }//GEN-LAST:event_btnUpdateActionPerformed
+
+    private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
+        CancelUpdate();
+    }//GEN-LAST:event_btnCancelActionPerformed
 
     /**
      * @param args the command line arguments
@@ -125,9 +193,14 @@ public class MainWindow extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnCancel;
     private javax.swing.JButton btnUpdate;
-    private javax.swing.JList<String> jList1;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JList<String> jListCurrentDownloads;
+    private javax.swing.JList<String> jListHeadlines;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JLabel lblDate;
     // End of variables declaration//GEN-END:variables
 }
