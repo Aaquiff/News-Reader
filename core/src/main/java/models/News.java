@@ -23,4 +23,10 @@ public class News {
         this.time = time;
     }
     
+    @Override
+    public String toString()
+    {
+        return String.format("%s %s %s", this.source, this.news, this.time.toString());
+    }
+    
 }

@@ -4,35 +4,38 @@ import java.util.ArrayList;
 
 /*
 *   Swing GUI to show news information to the user
-*   Interacts with the NewsLoader to fetch news informations
+*   Interacts with the NewsDownloader to fetch news informations
 */
 public class MainWindow extends javax.swing.JFrame {
 
-    NewsLoader newsLoader;
-            
+    NewsDownloader newsLoader;
+    
+    /**
+     * Default Constructor.
+     * Used to initialize the swing GUI elements
+     */
     public MainWindow() {
         initComponents();
     }
     
-    /*
-    Overloaded constructor accepts NewsPlugin objects as arguments
-    */
+    /**
+     * Overloaded constructor accepts NewsPlugin objects as arguments.
+     * @param pPlugins plugins that were loaded from the sec class
+     */
     public MainWindow(ArrayList<NewsPlugin> pPlugins) {
         this();
-        //Create the NewsLoader thread that loads the list of news
-        newsLoader = new NewsLoader(jListHeadlines, jListCurrentDownloads, pPlugins);
+        //Create the NewsDownloader thread that loads the list of news
+        newsLoader = new NewsDownloader(jListHeadlines, jListCurrentDownloads, pPlugins);
 
         //Create a clockthread that displays the time.
         Thread clockThread = new Thread(new ClockThread(lblDate));
         clockThread.start();
-        
-        Update();
     }
     
-    /*
-    *   Update the headlines.
-    *   Spins of a thread to update the headlines and the GUI does not wait
-    */
+    /**
+     * Update the headlines.
+     * Spins of a thread to update the headlines and the GUI does not wait
+     */
     private void Update(){
         Thread thread = new Thread(new Runnable(){ 
             @Override
@@ -44,6 +47,10 @@ public class MainWindow extends javax.swing.JFrame {
         
     }
     
+     /**
+     * Cancel current downloads.
+     * Interrupt all the download threads
+     */
     private void CancelUpdate(){
         Thread thread = new Thread(new Runnable(){ 
             @Override

@@ -1,4 +1,4 @@
-/*
+    /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
@@ -15,9 +15,22 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+/**
+ * Uses Jsoup library to handle HTML parsing related functions.
+ */
 public class HTMLParser {
-    public static ArrayList<News> Parse(String source, String html)
-    {
+    
+    /**
+     * Parse HTML and create news objects.
+     * Takes a url and the html and parses the html and returns ArrayList of News objects.
+     * source is required to create the news objects.
+     * Downloaded time is assumed to be the time the news object was created,
+     * It may differ to the original downloading time but not by much.
+     * @param source url of the website needed to create a news
+     * @param html html content of the webpage to be parsed
+     * @return List of news created from the parsed HTML
+     */
+    public static ArrayList<News> Parse(String source, String html){
         //ArrayList to return news
         ArrayList<News> news = new ArrayList<>();
         
@@ -25,62 +38,28 @@ public class HTMLParser {
         Document doc = Jsoup.parse(html);
         
         //Get all h1 tags and create a news elements
-        Elements elements = doc.getElementsByTag("h1");
-        for (Element e : elements) {
-            News n = new News(source, e.text(), Date.from(Instant.now()));
-            news.add(n);
-            System.out.println(e.text());
-        }
-        
-        //Get all h2 tags and create a news elements
-        elements = doc.getElementsByTag("h2");
-        for (Element e : elements) {
-            News n = new News(source, e.text(), Date.from(Instant.now()));
-            news.add(n);
-            System.out.println(e.text());
-        }
-        
-        //Get all h3 tags and create a news elements
-        elements = doc.getElementsByTag("h3");
-        for (Element e : elements) {
-            News n = new News(source, e.text(), Date.from(Instant.now()));
-            news.add(n);
-            System.out.println(e.text());
-        }
-        
-//        ArrayList<News> n1 = Parse1(source,html,"h1");
-//        ArrayList<News> n2 = Parse1(source,html,"h2");
-//        ArrayList<News> n3 = Parse1(source,html,"h3");
-//        
-//        for(News n : n1)
-//        {
-//            news.add(n);
-//        }
-//        for(News n : n2)
-//        {
-//            news.add(n);
-//        }
-//        for(News n : n3)
-//        {
-//            news.add(n);
-//        }
-        
+        GetNewsFromTag(doc,source,news,"h1");
+        GetNewsFromTag(doc,source,news,"h2");
+        GetNewsFromTag(doc,source,news,"h3");
+        GetNewsFromTag(doc,source,news,"h4");
+        GetNewsFromTag(doc,source,news,"h5");
+        GetNewsFromTag(doc,source,news,"h6");
         return news;
     }
     
-    public static ArrayList<News> Parse1(String source, String html, String tag)
-    {
-        ArrayList<News> news = new ArrayList<>();
-        
-        while (html.contains("<"+tag)) {
-            String temp = html.substring(html.indexOf("<"+tag), html.indexOf("</"+tag));
-            temp = temp.substring(temp.indexOf(">") + 1, temp.length());
-            news.add(new News(source,temp,Date.from(Instant.now())));
-
-            html = html.substring(html.indexOf("</"+tag) + 1, html.length());
+    /**
+     * Adds news to the list by reading the html document using JSoup.
+     * @param doc HTML Document
+     * @param source url of the website
+     * @param news List of news to be appended to
+     * @param tag Tag to search for and extract text in the Document
+     */
+    private static void GetNewsFromTag(Document doc, String source, ArrayList<News> news, String tag) {
+        Elements elements = doc.getElementsByTag(tag);
+        for (Element e : elements) {
+            News n = new News(source, e.text(), Date.from(Instant.now()));
+            news.add(n);
         }
-        
-        return news;
     }
 
 }

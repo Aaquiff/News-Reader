@@ -14,17 +14,43 @@ import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public abstract class NewsPlugin{
+/**
+ * Abstract classes to be inherited by the plugin. To implement a plugin,
+ * inherit from this abstract classes and implement the methods to get the URL
+ * and the Update frequency.
+ */
+public abstract class NewsPlugin {
 
+    /**
+     * Get the URL of the website the plugin points.
+     *
+     * @return the URL of the plugin
+     */
     public abstract String GetURL();
-    
+
+    /**
+     * Get the update frequency of the plugin.
+     *
+     * @return update frequency of the plugin
+     */
     public abstract int GetUpdateFrequency();
 
+    /**
+     * Update the plugin. Update the plugin and get the news from the website.
+     *
+     * @return ArrayList of the news from the plugin website
+     */
     public ArrayList<News> update() {
         String content = ReadHTMLPage(GetURL());
         return HTMLParser.Parse(GetURL(), content);
     }
 
+    /**
+     * Download and read the html page into a string.
+     *
+     * @param urlString URL of the website for the plugin
+     * @return html content of the website
+     */
     public String ReadHTMLPage(String urlString) {
         StringBuilder sb = new StringBuilder("");
 
