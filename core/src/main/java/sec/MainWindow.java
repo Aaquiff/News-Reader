@@ -1,14 +1,15 @@
 package sec;
 
+
 import java.util.ArrayList;
 
 /*
 *   Swing GUI to show news information to the user
-*   Interacts with the NewsDownloader to fetch news informations
+*   Interacts with the NewsController to fetch news informations
 */
 public class MainWindow extends javax.swing.JFrame {
 
-    NewsDownloader newsLoader;
+    NewsController newsLoader;
     
     /**
      * Default Constructor.
@@ -24,8 +25,8 @@ public class MainWindow extends javax.swing.JFrame {
      */
     public MainWindow(ArrayList<NewsPlugin> pPlugins) {
         this();
-        //Create the NewsDownloader thread that loads the list of news
-        newsLoader = new NewsDownloader(jListHeadlines, jListCurrentDownloads, pPlugins);
+        //Create the NewsController thread that loads the list of news
+        newsLoader = new NewsController(jListHeadlines, jListCurrentDownloads, pPlugins);
 
         //Create a clockthread that displays the time.
         Thread clockThread = new Thread(new ClockThread(lblDate));
@@ -33,18 +34,18 @@ public class MainWindow extends javax.swing.JFrame {
     }
     
     /**
-     * Update the headlines.
+     * UpdateAllPlugins the headlines.
      * Spins of a thread to update the headlines and the GUI does not wait
      */
     private void Update(){
-        Thread thread = new Thread(new Runnable(){ 
-            @Override
-            public void run() {
-                newsLoader.Update();
-            }
-        });
-        thread.start();
-        
+//        Thread thread = new Thread(new Runnable(){ 
+//            @Override
+//            public void run() {
+//                newsLoader.UpdateAllPlugins();
+//            }
+//        });
+//        thread.start();
+        newsLoader.UpdateAllPlugins();
     }
     
      /**

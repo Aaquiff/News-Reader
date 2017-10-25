@@ -21,7 +21,7 @@ public class Sec {
         ArrayList<NewsPlugin> plugins = new ArrayList<>();
         PluginLoader pl = new PluginLoader();
 
-        System.out.println("Enter plugins to load (0 to exit) : ");
+        //System.out.println("Enter plugins to load (0 to exit) : ");
 
         try {
 //            String pluginName = scanner.next();
@@ -39,12 +39,6 @@ public class Sec {
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(Sec.class.getName()).log(Level.SEVERE, null, ex);
         }
-
-        System.out.println("*******************************");
-        for (NewsPlugin np : plugins) {
-            System.out.println("Loaded : " + np.GetURL());
-        }
-        System.out.println("*******************************");
 
         MainWindow mainWindow = new MainWindow(plugins);
         mainWindow.setVisible(true);

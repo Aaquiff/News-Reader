@@ -4,3 +4,10 @@ bbc/build/
 core/build/
 deploy/
 nytimes/build/
+.nb-gradle/private/cache/core-fb83b73eb3c879b18d343675f32aca61
+.nb-gradle/private/cache/nytimes-9aaf8732692cd45a7cc3ad3c25757a0f
+.nb-gradle/private/cache/arstechnica-c905345d3bf01a40c47bd7d860747433
+.nb-gradle/private/cache/SECGithub-d41d8cd98f00b204e9800998ecf8427e
+.nb-gradle/private/cache/bbc-6d974a49e22c7c4cfeecb5a8641ca268
+build/tmp/jar/MANIFEST.MF
+build/libs/App.jar
