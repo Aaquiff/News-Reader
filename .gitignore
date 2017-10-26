@@ -11,3 +11,7 @@ nytimes/build/
 .nb-gradle/private/cache/bbc-6d974a49e22c7c4cfeecb5a8641ca268
 build/tmp/jar/MANIFEST.MF
 build/libs/App.jar
+.nb-gradle/profiles/private/aux-config
+build/
+plugins/Arstechnica.class
+plugins/

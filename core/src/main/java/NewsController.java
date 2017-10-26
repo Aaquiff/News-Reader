@@ -1,7 +1,5 @@
 package sec;
 
-
-import models.News;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
@@ -135,6 +133,7 @@ public class NewsController {
             for (News n : newsList) {
                 dlm.addElement(n);
             }
+            System.out.println(dlm.getSize());
             UpdateSwingList(jListHeadlines, dlm);
         }
     }

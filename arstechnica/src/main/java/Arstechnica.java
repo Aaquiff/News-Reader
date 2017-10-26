@@ -1,7 +1,4 @@
-package plugins;
-
-import sec.*;
-
+package sec;
 
 public class Arstechnica extends NewsPlugin {
     

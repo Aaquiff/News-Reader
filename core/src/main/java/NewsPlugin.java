@@ -1,6 +1,5 @@
 package sec;
 
-
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -9,7 +8,6 @@ import java.nio.channels.Channels;
 import java.nio.channels.ClosedByInterruptException;
 import java.nio.channels.ReadableByteChannel;
 import java.nio.charset.Charset;
-import models.News;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.logging.Level;

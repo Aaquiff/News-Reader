@@ -1,7 +1,5 @@
 package sec;
 
-
-import models.News;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -48,6 +46,7 @@ public class NewsDownloader {
      * that is relative to the url argument.
      */
     public void ScheduledUpdate() {
+        System.out.println("Scheduling Updates");
         for (NewsPlugin plugin : plugins) {
             executor.submit(new Runnable() {
                 @Override

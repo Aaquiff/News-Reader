@@ -1,6 +1,5 @@
 package sec;
 
-
 import java.nio.file.*;
 
 /**
@@ -18,7 +17,6 @@ public class PluginLoader extends ClassLoader {
      */
     public NewsPlugin loadPlugin(String fname) throws ClassNotFoundException {
         try {
-
             String fileName = "plugins/" + fname + ".class";
             byte[] classData = Files.readAllBytes(Paths.get(fileName));
             Class<?> cls = defineClass(null, classData, 0, classData.length);

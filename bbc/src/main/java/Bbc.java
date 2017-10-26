@@ -1,6 +1,4 @@
-package plugins;
-
-import sec.*;
+package sec;
 
 public class Bbc extends NewsPlugin {
     

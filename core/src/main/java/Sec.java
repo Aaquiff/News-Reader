@@ -20,7 +20,6 @@ public class Sec {
         Scanner scanner = new Scanner(System.in);
         ArrayList<NewsPlugin> plugins = new ArrayList<>();
         PluginLoader pl = new PluginLoader();
-
         //System.out.println("Enter plugins to load (0 to exit) : ");
 
         try {
@@ -35,9 +34,12 @@ public class Sec {
             plugins.add(pl.loadPlugin("Bbc"));
             plugins.add(pl.loadPlugin("Nytimes"));
             plugins.add(pl.loadPlugin("Arstechnica"));
-
         } catch (ClassNotFoundException ex) {
+            System.out.println(ex);
             Logger.getLogger(Sec.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        catch (Exception ex) {
+            System.out.println(ex);
         }
 
         MainWindow mainWindow = new MainWindow(plugins);

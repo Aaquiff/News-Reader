@@ -1,0 +1,1 @@
+java -jar ./core/build/libs/core.jar

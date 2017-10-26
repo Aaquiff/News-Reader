@@ -1,16 +1,13 @@
 //Gradle file for the main directory
 
-apply plugin: 'java'
-
-
 subprojects{
     apply plugin: 'java'
     
     task copyClassesToBin{
         
         copy {
-            from 'build/classes/main/plugins/'
-            into '../deploy/plugins'
+            from 'build/classes/main/sec/'
+            into '../plugins'
         }
         
     }
@@ -19,30 +16,27 @@ subprojects{
         tasks.copyClassesToBin.execute()
     }
 
-    dependencies {
-        compile 'org.jsoup:jsoup:1.10.3'
-    }
 
     repositories {
         mavenCentral()
     }
 }
 
-subprojects.each { subproject -> evaluationDependsOn( subproject.path ) }
-jar.dependsOn subprojects.tasks['classes']
-jar {
-    baseName = 'App'
-    manifest {
-        attributes 'Main-Class': 'sec.Sec'
-    }
-    subprojects.each { subproject ->
-        from subproject.sourceSets.main.output.classesDir
-        from subproject.sourceSets.main.output.resourcesDir
-    }
-    
-    
-}
-
+// subprojects.each { subproject -> evaluationDependsOn( subproject.path ) }
+// jar.dependsOn subprojects.tasks['classes']
+// jar {
+//     baseName = 'App'
+//     manifest {
+//         attributes 'Main-Class': 'sec.Sec'
+//     }
+//     subprojects.each { subproject ->
+//         from subproject.sourceSets.main.output.classesDir
+//         from subproject.sourceSets.main.output.resourcesDir
+//     }
+//    
+//    
+// }
+//
 //compileJava.doLast{
 //    subprojects.each { subproject ->
 //        copy {
