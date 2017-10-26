@@ -1,11 +1,14 @@
 package sec;
 
+import java.util.logging.Logger;
 import java.util.ArrayList;
 import java.util.concurrent.CancellationException;
+import java.util.logging.Level;
 
 
 public class NewsDownloaderThread implements Runnable {
 
+    private final static Logger logger = Logger.getLogger(NewsDownloaderThread.class.getName());
     NewsController newsController;
     NewsPlugin plugin;
 
@@ -17,15 +20,17 @@ public class NewsDownloaderThread implements Runnable {
     @Override
     public void run() {
         try {
-            
+
             //Update Currently Downloading list
             newsController.SetDownloading(plugin.GetURL());
 
+            logger.log(Level.INFO, "Starting Download ");
+            
             //Update the plugin and get News objects returned
             ArrayList<News> newsList = plugin.update();
-
             
-            System.out.println("Test");
+            logger.log(Level.INFO, "Downloaded ");
+            
             if (Thread.interrupted()) {
                 throw new InterruptedException();
             }
@@ -33,11 +38,11 @@ public class NewsDownloaderThread implements Runnable {
             newsController.updateHeadlinesList(newsList);
 
         } catch (InterruptedException ex) {
-            System.out.println(Thread.currentThread().getId() + " Interrupted");
+            logger.log(Level.INFO, "Thread Interrupted ");
         } catch (CancellationException ex) {
-            System.out.println("Cancelled");
+            logger.log(Level.INFO, "Thread Cancelled ");
         } catch(Exception ex) {
-            System.out.println(ex.getMessage());
+            logger.log(Level.SEVERE, ex.getMessage());
         }
         finally {
             //Update Currently Downloading list

@@ -14,7 +14,7 @@ import java.util.concurrent.LinkedBlockingQueue;
  */
 public class MyExecutorService {
     
-    ExecutorService service = Executors.newCachedThreadPool();
+    ExecutorService service = Executors.newFixedThreadPool(5);
     private final BlockingQueue<Runnable> runnableQueue = new LinkedBlockingQueue();;
     ArrayList<Future<?>> futures = new ArrayList<>();
     

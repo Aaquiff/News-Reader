@@ -28,21 +28,35 @@ public class HTMLParser {
         return n;
     }
 
-    public static ArrayList<News> Parse1(String source, String html, String tag)
-    {
+    public static ArrayList<News> Parse1(String source, String html, String tag) {
         ArrayList<News> news = new ArrayList<>();
         
         while (html.contains("<"+tag)) {
             String temp = html.substring(html.indexOf("<"+tag), html.indexOf("</"+tag));
             temp = temp.substring(temp.indexOf(">") + 1, temp.length());
-            news.add(new News(source,temp,Date.from(Instant.now())));
-
+            
+            temp = RemoveUnwantedTags(temp);
+            if(!temp.isEmpty())  
+                news.add(new News(source,temp,Date.from(Instant.now())));
+            
             html = html.substring(html.indexOf("</"+tag) + 1, html.length());
         }
         
         return news;
     }
 
+    private static String RemoveUnwantedTags(String html) {
+        String temp = html;
+        
+        while(temp.contains("<"))
+        {
+            int start = temp.indexOf("<");
+            int end = temp.indexOf(">");
+            temp = temp.substring(0,start==0?0:start-1) + temp.substring(end+1);
+        }
+        temp = temp.trim();
+        return temp;      
+    }
 
 }
 

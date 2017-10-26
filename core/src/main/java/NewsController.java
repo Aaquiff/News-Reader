@@ -1,6 +1,7 @@
 package sec;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -27,7 +28,7 @@ public class NewsController {
 
     MyExecutorService executorService = new MyExecutorService();
     DefaultListModel currentlyDownloadingListModel = new DefaultListModel();
-    LinkedBlockingQueue<News> newsList = new LinkedBlockingQueue<>();
+    ArrayList<News> newsList = new ArrayList<>();
 
     /**
      * Overloaded Constructor. Constructor with 3 arguments
@@ -106,11 +107,7 @@ public class NewsController {
                 }
                 //News doesn't exist so add it to the list
                 if (!newsAlreadyExists) {
-                    try {
-                        newsList.put(n1);
-                    } catch (InterruptedException ex) {
-                        Logger.getLogger(NewsController.class.getName()).log(Level.SEVERE, null, ex);
-                    }
+                        newsList.add(n1);
                 }
             }
 
@@ -130,10 +127,11 @@ public class NewsController {
                 }
             }
 
+            Collections.sort(newsList);
+            
             for (News n : newsList) {
                 dlm.addElement(n);
             }
-            System.out.println(dlm.getSize());
             UpdateSwingList(jListHeadlines, dlm);
         }
     }
